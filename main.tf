@@ -1,27 +1,5 @@
 # Define variables for local scope
-/*
 locals {
-
-  key_cmk     = var.key_exist || var.key_custom_enabled || (substr(var.cia, 0, 1) == "A" && (substr(var.rsg_name, 3, 1) == "i" || substr(var.rsg_name, 3, 1) == "p")) ? true : false
-  lwk_enabled = substr(var.rsg_name, 3, 1) == "p" || var.analytics_diagnostic_monitor_enabled == true ? true : false
-  name_cia = can(data.azurerm_resource_group.rsg_principal.tags["cia"]) ? "cia" : "CIA"
-
-  private_tags = {
-    (local.name_cia) = var.cia
-    "hidden-deploy"  = "curated"
-  }
-
-  tags = merge({
-    "Product"        = var.product
-    "Cost Center"    = var.cost_center
-    "shared_costs"   = var.shared_costs
-    "APM_functional" = var.apm_functional != "" ? var.apm_functional : null
-    "CIA"            = var.cia
-    "hidden-deploy"  = "curated"
-  }, var.custom_tags)
-
-*/
-  locals {
   private_tags = {
     entity        = var.entity
     environment   = var.environment
