@@ -190,3 +190,24 @@ variable "optional_tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "cia" {
+  type    = string
+  default = ""
+}
+
+variable "product" {
+  type    = string
+  default = ""
+}
+
+variable "shared_costs" {
+  type    = string
+  default = ""
+}
+
+variable "apm_functional" {
+  type    = string
+  default = ""
+}
+
