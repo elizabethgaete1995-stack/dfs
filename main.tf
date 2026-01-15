@@ -9,7 +9,7 @@ locals {
     hidden-deploy = "curated"
   }
 }
-
+/*
   parameters_adanalytics = {
     name              = { value = "${var.adf_name}" }
     location          = { value = "${var.location}" }
@@ -20,7 +20,7 @@ locals {
     tagsByResource    = { value = "${merge(local.tags, var.custom_tags)}" }
   }
 }
-
+*/
 # Get info about curent session
 data "azurerm_client_config" "current" {
 }
