@@ -33,7 +33,7 @@ analytics_diagnostic_monitor_enabled = true
 
 
 // TAGGING
-cost_center                          = "CC-POCCHL
+cost_center                          = "CC-POCCHL"
 location                             = "chilecentral"
 entity                               = "dls"
 environment                          = "dev"
