@@ -138,53 +138,55 @@ variable "analytics_diagnostic_monitor_enabled"{
     default = true
 }
 
-// TAGGING
-variable "inherit" {
-  type = bool
-  description = "(Optional) Inherits resource group tags. Values can be false or true (by default)."
-  default = true
+############################################
+# Naming / tags
+############################################
+variable "entity" {
+  description = "(Required) Entity/product tag (also used in name)."
+  type        = string
 }
 
-variable "product" {
-    type        = string
-    description = "(Required) The product tag will indicate the product to which the associated resource belongs to. In case shared_costs is Yes, product variable can be empty."
-    default = null
+variable "environment" {
+  description = "(Required) Environment tag (e.g. dev/qa/prod)."
+  type        = string
+}
+
+variable "app_name" {
+  description = "(Required) Application tag (also used in name)."
+  type        = string
+}
+
+variable "sequence_number" {
+  description = "(Required) Sequence number used in name (e.g. 001)."
+  type        = string
 }
 
 variable "cost_center" {
-    type        = string
-    description = "(Required) This tag will report the cost center of the resource. In case shared_costs is Yes, cost_center variable can be empty."
-    default = null
+  description = "(Optional) Cost center tag."
+  type        = string
+  default     = null
 }
 
-variable "shared_costs" {
-    type        = string
-    description = "(Optional) Helps to identify costs which cannot be allocated to a unique cost center, therefore facilitates to detect resources which require subsequent cost allocation and cost sharing between different payers."
-    default     = "No"
-    validation {
-        condition     = var.shared_costs == "Yes" || var.shared_costs == "No"
-        error_message = "Only `Yes`, `No` or empty values are allowed."
-    }
-}
-  
-variable "apm_functional" {
-    type        = string
-    description = "(Optional) Allows to identify to which functional application the resource belong, and its value must match with existing functional application code in Entity application portfolio management (APM) systems. In case shared_costs is Yes, apm_functional variable can be empty."
-    default = null
-}
-    
-variable "cia"{
-    type = string
-    description = "(Required) Allows a proper data classification to be attached to the resource."
-    validation {
-        condition     = length(var.cia) == 3 && contains(["C", "B", "A"], substr(var.cia, 0, 1)) && contains(["L", "M", "H"], substr(var.cia, 1, 1)) && contains(["L", "M", "C"], substr(var.cia, 2, 1))   
-        error_message = "CIA must be a 3 character long and has to comply with the CIA nomenclature (CLL, BLM, AHM...). In sandbox this variable does not apply."
-    }
-    default = "AHC"
+variable "tracking_code" {
+  description = "(Optional) Tracking code tag."
+  type        = string
+  default     = null
 }
 
-variable "custom_tags"{
-    type = map(string)
-    description = "(Optional) Custom tags for product."
-    default = {}
+variable "inherit" {
+  description = "(Optional) Present for compatibility with existing tfvars. Not used by this module."
+  type        = bool
+  default     = true
+}
+
+variable "custom_tags" {
+  description = "(Optional) Custom tags to merge into the Storage Account."
+  type        = map(string)
+  default     = {}
+}
+
+variable "optional_tags" {
+  description = "(Optional) Extra tags to merge into the Storage Account."
+  type        = map(string)
+  default     = {}
 }
