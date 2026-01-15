@@ -1,4 +1,5 @@
 # Define variables for local scope
+/*
 locals {
 
   key_cmk     = var.key_exist || var.key_custom_enabled || (substr(var.cia, 0, 1) == "A" && (substr(var.rsg_name, 3, 1) == "i" || substr(var.rsg_name, 3, 1) == "p")) ? true : false
@@ -19,6 +20,17 @@ locals {
     "hidden-deploy"  = "curated"
   }, var.custom_tags)
 
+*/
+  locals {
+  private_tags = {
+    entity        = var.entity
+    environment   = var.environment
+    app_name      = var.app_name
+    cost_center   = var.cost_center
+    tracking_code = var.tracking_code
+    hidden-deploy = "curated"
+  }
+}
 
   parameters_adanalytics = {
     name              = { value = "${var.adf_name}" }
