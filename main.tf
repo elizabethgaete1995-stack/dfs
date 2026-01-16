@@ -1,5 +1,30 @@
 # Define variables for local scope
 locals {
+  # Activa CMK solo si realmente lo estás usando (si no, queda apagado)
+  key_cmk = try(var.key_exist, false) || try(var.key_custom_enabled, false)
+
+  # Activa Log Analytics si lo pides o si el naming del RG lo gatilla (si no existe var, queda false)
+  lwk_enabled = (
+    (try(substr(var.rsg_name, 3, 1), "") == "p") ||
+    (try(var.analytics_diagnostic_monitor_enabled, false) == true)
+  )
+
+  # Tags base (mínimos) — ajusta llaves si tu estándar corporativo usa otras
+  private_tags = {
+    entity        = try(var.entity, null)
+    environment   = try(var.environment, try(var.enviroment, null))
+    app_name      = try(var.app_name, null)
+    cost_center   = try(var.cost_center, null)
+    tracking_code = try(var.tracking_code, null)
+    hidden-deploy = "curated"
+  }
+
+  # Tags finales (si hay inherit, lo calculas donde corresponda; esto evita el "local.tags" faltante)
+  tags = merge(local.private_tags, try(var.custom_tags, {}), try(var.optional_tags, {}))
+}
+
+
+/* locals {
   private_tags = {
     entity        = var.entity
     environment   = var.environment
@@ -9,7 +34,7 @@ locals {
     hidden-deploy = "curated"
   }
 }
-/*
+
   parameters_adanalytics = {
     name              = { value = "${var.adf_name}" }
     location          = { value = "${var.location}" }
@@ -57,7 +82,7 @@ resource "azurerm_key_vault_key" "key_generate" {
   key_type     = "RSA"
   key_size     = 2048
 
-  tags = var.inherit ? merge(merge(data.azurerm_resource_group.rsg_principal.tags, var.custom_tags), local.private_tags) : local.tags
+  #tags = var.inherit ? merge(merge(data.azurerm_resource_group.rsg_principal.tags, var.custom_tags), local.private_tags) : local.tags
 
   key_opts = [
     "decrypt",
@@ -128,7 +153,7 @@ resource "azurerm_data_factory" "adf" {
     type         = local.key_cmk == true ? "UserAssigned" : "SystemAssigned"
     identity_ids = local.key_cmk == true ? distinct(compact(concat(var.identity_list, formatlist(azurerm_user_assigned_identity.uai[0].id)))) : null
   }
-  tags = var.inherit ? merge(merge(data.azurerm_resource_group.rsg_principal.tags, var.custom_tags), local.private_tags) : local.tags
+  #tags = var.inherit ? merge(merge(data.azurerm_resource_group.rsg_principal.tags, var.custom_tags), local.private_tags) : local.tags
 }
 
 resource "azurerm_data_factory_linked_service_key_vault" "linked" {
