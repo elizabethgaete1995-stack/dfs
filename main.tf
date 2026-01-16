@@ -1,5 +1,16 @@
 # Define variables for local scope
 locals {
+
+  parameters_adanalytics = {
+    # ejemplo típico de parámetros ARM
+    factoryName = {
+      value = azurerm_data_factory.adf.name
+    }
+    # keyVaultName = { value = data.azurerm_key_vault.akv_principal[0].name }
+    # location     = { value = var.location }
+
+
+
   # Activa CMK solo si realmente lo estás usando (si no, queda apagado)
   key_cmk = try(var.key_exist, false) || try(var.key_custom_enabled, false)
 
