@@ -12,7 +12,7 @@ locals {
   # Tags base (mínimos) — ajusta llaves si tu estándar corporativo usa otras
   private_tags = {
     entity        = try(var.entity, null)
-    environment   = try(var.environment, try(var.enviroment, null))
+    environment   = try(var.environment, try(var.environment, null))
     app_name      = try(var.app_name, null)
     cost_center   = try(var.cost_center, null)
     tracking_code = try(var.tracking_code, null)
